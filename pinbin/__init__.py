@@ -9,19 +9,22 @@ app.config["SECRET_KEY"] = "HIMOM"
 
 MONGO_URL = os.environ.get("MONGOHQ_URL")
 
+
 if MONGO_URL:
-    credentials = re.sub(r"(.*?)//(.*?)(@hatch)", r"\2",MONGO_URL)
-    username = credentials.split(":")[0]
-    password = credentials.split(":")[1]
-    app.config["MONGODB_DB"] = MONGO_URL.split("/")[-1]
-    connect(
+  app.config["MONGODB_HOST"] = MONGO_URL
+"""
+  credentials = re.sub(r"(.*?)//(.*?)(@hatch)", r"\2",MONGO_URL)
+  username = credentials.split(":")[0]
+  password = credentials.split(":")[1]
+  app.config["MONGODB_DB"] = MONGO_URL.split("/")[-1]
+  connect(
         MONGO_URL.split("/")[-1],
         host=MONGO_URL,
         port=1043,
         username=username,
         password=password
-    )
-
+  )
+"""
 db = MongoEngine(app)
 
 # log to stderr
