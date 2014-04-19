@@ -1,5 +1,5 @@
 from flask import Flask
-from flask.ext.mongoengine import MongoEngine, connect
+from flask.ext.mongoengine import MongoEngine
 import os, re
 
 
