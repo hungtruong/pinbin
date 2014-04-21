@@ -1,10 +1,33 @@
 {% extends "base.html" %}
 
 {% block content %}
+  <div id="map" style="height:400px; width:auto;">
+  </div>
+
   <h2>List of locations</h2>
   <ul>
   {% for location in locations %}
   <li><a href="">{{location}}</a></li>
   {% endfor %}
   </ul>
+
+<script>
+  // Create a map in the div #map
+  var map = L.mapbox.map('map', 'hungtruong.i1fjp7pj');
+
+  //make json call to get geojson of latest points, draw radius around it
+  var circleLayer = new L.GeoJSON.AJAX("/geojson_circles/",
+  {
+    pointToLayer: function(feature, latlng) {
+      return L.circle(latlng, feature.properties.radius)
+  }})
+
+  circleLayer.addTo(map);
+
+  circleLayer.on('data:loaded', function() {
+    map.fitBounds(circleLayer.getBounds());
+  });
+
+</script>
+
 {% endblock %}

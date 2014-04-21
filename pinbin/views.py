@@ -1,12 +1,13 @@
 from pinbin.models import Location
 from pinbin import app, db
 from flask import render_template, request, make_response
+import json
 
 @app.route('/', methods=['GET', 'POST'])
 def show_locations():
   if request.method == 'GET':
     #show list of locations
-    locations = Location.objects.all()
+    locations = Location.objects.limit(50)
     return render_template('locations/list.html', locations=locations)
   else:
     #handle location post
@@ -22,3 +23,11 @@ def show_locations():
       return resp
     else:
       return "Error saving", 401
+
+@app.route('/geojson_circles/')
+def get_geojson_circles():
+  locations = Location.objects.limit(50)
+  geojson_locations = []
+  for location in locations:
+    geojson_locations.append(location.geojson())
+  return json.dumps(geojson_locations)
