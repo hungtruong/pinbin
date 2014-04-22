@@ -13,7 +13,7 @@
 
 <script>
   // Create a map in the div #map
-  var map = L.mapbox.map('map', 'hungtruong.i1fjp7pj');
+  var map = L.mapbox.map('map', '{{config.MAPBOX_KEY}}');
 
   //make json call to get geojson of latest points, draw radius around it
   var circleLayer = new L.GeoJSON.AJAX("/geojson_circles/",

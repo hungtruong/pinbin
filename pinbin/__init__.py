@@ -7,6 +7,7 @@ from util import MongoHQURL
 app = Flask(__name__)
 app.config["MONGODB_SETTINGS"] = {'DB': "pinbin"}
 app.config["SECRET_KEY"] = "HIMOM"
+app.config["MAPBOX_KEY"] = os.environ.get("MAPBOX_KEY")
 
 MONGO_URL = os.environ.get("MONGOHQ_URL")
 
