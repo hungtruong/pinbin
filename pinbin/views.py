@@ -1,7 +1,7 @@
 from pinbin.models import Location
 from pinbin import app, db
 from flask import render_template, request, make_response
-import json
+import json, datetime
 
 @app.route('/', methods=['GET', 'POST'])
 def show_locations():
@@ -15,9 +15,12 @@ def show_locations():
     latitude = float(request.values['latitude'])
     speed = request.values.get('speed')
     accuracy = request.values.get('accuracy')
+    timestamp = float(request.values.get('timestamp'))
     location = Location(coordinate=[longitude,latitude],
                         speed=speed,
                         accuracy=accuracy)
+    if (timestamp):
+      location.created_at = datetime.datetime.fromtimestamp(timestamp)
     if location.save():
       resp = make_response("ok\n")
       return resp
