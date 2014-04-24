@@ -4,6 +4,18 @@
   <div id="map" style="height:400px; width:auto;">
   </div>
 
+  <div class="checkbox">
+    <label>
+      <input id="radius_checkbox" type="checkbox" checked> Radius circles
+    </label>
+  </div>
+
+  <div class="checkbox">
+    <label>
+      <input id="path_checkbox" type="checkbox" checked> Paths
+    </label>
+  </div>
+
   <h2>List of locations</h2>
   <ul>
   {% for location in locations %}
@@ -27,6 +39,35 @@
   circleLayer.on('data:loaded', function() {
     map.fitBounds(circleLayer.getBounds());
   });
+
+  var pathLayer = new L.GeoJSON.AJAX("/geojson_path/",
+  {
+    color:'red'
+  });
+
+  pathLayer.addTo(map);
+
+  function toggleLayer(layer){
+    if (map.hasLayer(layer)) {
+            map.removeLayer(layer);
+        } else {
+            map.addLayer(layer);
+        }
+  }
+
+  var radius_checkbox = document.getElementById('radius_checkbox');
+  radius_checkbox.addEventListener('click', function()
+  {
+    toggleLayer(circleLayer);
+  });
+
+  var path_checkbox = document.getElementById('path_checkbox');
+  path_checkbox.addEventListener('click', function()
+  {
+    toggleLayer(pathLayer);
+  });
+
+
 
 </script>
 

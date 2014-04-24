@@ -31,3 +31,13 @@ def get_geojson_circles():
   for location in locations:
     geojson_locations.append(location.geojson())
   return json.dumps(geojson_locations)
+
+@app.route('/geojson_path/')
+def get_geojson_path():
+  locations = Location.objects.limit(50)
+  geojson_path = {"type": "LineString"}
+  coordinates = []
+  for location in locations:
+    coordinates.append(location.coordinate)
+  geojson_path['coordinates'] = coordinates
+  return json.dumps(geojson_path)
