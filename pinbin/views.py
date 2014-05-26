@@ -6,9 +6,15 @@ import json, datetime
 @app.route('/', methods=['GET', 'POST'])
 def show_locations():
   if request.method == 'GET':
+    page = request.args.get('page', default=1, type=int)
+    limit = request.args.get('limit', default=50, type=int)
     #show list of locations
-    locations = Location.objects.limit(50)
-    return render_template('locations/list.html', locations=locations)
+    locations = Location.objects.paginate(page=page, per_page=limit)
+    #locations = Location.objects.limit(limit)
+    return render_template('locations/list.html',
+                            locations=locations,
+                            page=page,
+                            limit=limit)
   else:
     #handle location post
     longitude = float(request.values['longitude'])
@@ -29,18 +35,22 @@ def show_locations():
 
 @app.route('/geojson_circles/')
 def get_geojson_circles():
-  locations = Location.objects.limit(50)
+  page = request.args.get('page', default=1, type=int)
+  limit = request.args.get('limit', default=50, type=int)
+  locations = Location.objects.paginate(page=page, per_page=limit)
   geojson_locations = []
-  for location in locations:
+  for location in locations.items:
     geojson_locations.append(location.geojson())
   return json.dumps(geojson_locations)
 
 @app.route('/geojson_path/')
 def get_geojson_path():
-  locations = Location.objects.limit(50)
+  page = request.args.get('page', default=1, type=int)
+  limit = request.args.get('limit', default=50, type=int)
+  locations = Location.objects.paginate(page=page, per_page=limit)
   geojson_path = {"type": "LineString"}
   coordinates = []
-  for location in locations:
+  for location in locations.items:
     coordinates.append(location.coordinate)
   geojson_path['coordinates'] = coordinates
   return json.dumps(geojson_path)

@@ -16,9 +16,26 @@
     </label>
   </div>
 
+  <ul class="pagination">
+    {% for page in locations.iter_pages() %}
+      {% if page %}
+        {% if page != locations.page %}
+          <li><a href="{{ url_for('show_locations',page=page, limit=limit) }}">{{page}}</a></li>
+        {% else %}
+          <li class="active"><span>{{ page }}</span></li>
+        {% endif %}
+      {% else %}
+      <li class="disabled"><span>…</span></li>
+      {% endif %}
+    {% endfor %}
+    {% if locations.has_next %}
+      <li><a href="{{ url_for('show_locations',page=page+1, limit=limit) }}">Next &raquo;</a></li>
+  {% endif %}
+  </div>
+
   <h2>List of locations</h2>
   <ul>
-  {% for location in locations %}
+  {% for location in locations.items %}
   <li><a href="">{{location}}</a></li>
   {% endfor %}
   </ul>
@@ -28,7 +45,7 @@
   var map = L.mapbox.map('map', '{{config.MAPBOX_KEY}}');
 
   //make json call to get geojson of latest points, draw radius around it
-  var circleLayer = new L.GeoJSON.AJAX("/geojson_circles/",
+  var circleLayer = new L.GeoJSON.AJAX("/geojson_circles/?limit={{limit}}&page={{page}}",
   {
     pointToLayer: function(feature, latlng) {
       return L.circle(latlng, feature.properties.radius)
@@ -40,7 +57,7 @@
     map.fitBounds(circleLayer.getBounds());
   });
 
-  var pathLayer = new L.GeoJSON.AJAX("/geojson_path/",
+  var pathLayer = new L.GeoJSON.AJAX("/geojson_path/?limit={{limit}}&page={{page}}",
   {
     color:'red'
   });
