@@ -91,3 +91,6 @@ PinBin accepts the following parameters when taking location data:
 * timestamp (optional, defaults to creation time) In unix timestamp format
 * accuracy (optional) Horizontal accuracy of location
 * speed (optional) Speed in meters of device
+
+For an example of an iOS app that will send location data to PinBin, see
+the [PinBin iOS app repo on Github](https://github.com/hungtruong/pinbin-ios).
